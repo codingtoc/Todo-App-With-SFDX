@@ -40,13 +40,19 @@
             type="text"
             placeholder="Enter new task"
             variant="label-hidden"
+            value={newTodoItem}
             label="New Task"
+            onchange={updateNewTodoItem}
             required
           >
           </lightning-input>
         </lightning-layout-item>
         <lightning-layout-item padding="horizontal-small">
-          <lightning-button variant="brand" label="Add"></lightning-button>
+          <lightning-button
+            variant="brand"
+            label="Add"
+            onclick={addTodoItemToList}
+          ></lightning-button>
         </lightning-layout-item>
       </lightning-layout>
     </p>
