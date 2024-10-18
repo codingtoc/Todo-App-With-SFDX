@@ -2,6 +2,7 @@ import { LightningElement, track, wire } from "lwc";
 import getTasks from "@salesforce/apex/TodoListController.getTasks";
 import { refreshApex } from "@salesforce/apex";
 import insertTask from "@salesforce/apex/TodoListController.insertTask";
+import deleteTask from "@salesforce/apex/TodoListController.deleteTask";
 
 export default class TodoApp extends LightningElement {
   @track
@@ -38,11 +39,19 @@ export default class TodoApp extends LightningElement {
   deleteTodoItemFromList(event) {
     let idToDelete = event.target.name;
     let todoList = this.todoList;
-
-    todoList.splice(
-      todoList.findIndex((todoItem) => todoItem.id === idToDelete),
-      1
+    let todoItemIndex = todoList.findIndex(
+      (todoItem) => todoItem.id === idToDelete
     );
+    let recordIdToDelete = todoList[todoItemIndex].recordId;
+    deleteTask({ recordId: recordIdToDelete })
+      .then((result) => {
+        if (result) {
+          todoList.splice(todoItemIndex, 1);
+        } else {
+          console.log("Unable to delete task");
+        }
+      })
+      .catch((error) => console.log(error));
   }
 
   @wire(getTasks)

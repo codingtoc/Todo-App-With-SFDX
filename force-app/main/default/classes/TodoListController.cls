@@ -25,4 +25,15 @@ public with sharing class TodoListController {
     }
     return null;
   }
+
+  @AuraEnabled
+  public static Boolean deleteTask(Id recordId) {
+    try {
+      Database.delete(recordId, AccessLevel.USER_MODE);
+      return true;
+    } catch (Exception e) {
+      System.debug(e.getMessage());
+    }
+    return false;
+  }
 }
