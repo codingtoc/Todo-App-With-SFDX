@@ -24,4 +24,14 @@ export default class TodoApp extends LightningElement {
     });
     this.newTodoItem = "";
   }
+
+  deleteTodoItemFromList(event) {
+    let idToDelete = event.target.name;
+    let todoList = this.todoList;
+
+    todoList.splice(
+      todoList.findIndex((todoItem) => todoItem.id === idToDelete),
+      1
+    );
+  }
 }
