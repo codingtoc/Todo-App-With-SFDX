@@ -1,9 +1,7 @@
-import { LightningElement, track } from "lwc";
+import { LightningElement, wire } from "lwc";
+import getTasks from "@salesforce/apex/TodoListController.getTasks";
 
 export default class TodoApp extends LightningElement {
-  @track
-  todoList = [];
-
   newTodoItem = "";
 
   updateNewTodoItem(event) {
@@ -34,4 +32,7 @@ export default class TodoApp extends LightningElement {
       1
     );
   }
+
+  @wire(getTasks)
+  todoList;
 }
