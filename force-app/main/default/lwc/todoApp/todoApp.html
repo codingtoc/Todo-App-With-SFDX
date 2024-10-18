@@ -3,36 +3,35 @@
     <lightning-button-icon
       slot="actions"
       icon-name="utility:sync"
-      alternative-text="Sync"
-      title="Sync"
+      alternative-text="Refresh"
+      onclick={refreshTodoList}
+      title="Refresh"
     >
     </lightning-button-icon>
     <lightning-layout>
       <lightning-layout-item size="12">
         <ul class="slds-has-dividers_around-space">
-          <template if:true={todoList.data}>
-            <template for:each={todoList.data} for:item="todoItem">
-              <li key={todoItem.Id} class="slds-item">
-                <lightning-layout
-                  vertical-align="center"
-                  horizontal-align="spread"
-                >
-                  <lightning-layout-item padding="horizontal-small">
-                    {todoItem.Subject}
-                  </lightning-layout-item>
-                  <lightning-layout-item padding="horizontal-small">
-                    <lightning-button-icon
-                      icon-name="utility:delete"
-                      alternative-text="Delete"
-                      name={todoItem.Id}
-                      onclick={deleteTodoItemFromList}
-                      title="Delete"
-                    >
-                    </lightning-button-icon>
-                  </lightning-layout-item>
-                </lightning-layout>
-              </li>
-            </template>
+          <template for:each={todoList} for:item="todoItem">
+            <li key={todoItem.id} class="slds-item">
+              <lightning-layout
+                vertical-align="center"
+                horizontal-align="spread"
+              >
+                <lightning-layout-item padding="horizontal-small">
+                  {todoItem.name}
+                </lightning-layout-item>
+                <lightning-layout-item padding="horizontal-small">
+                  <lightning-button-icon
+                    icon-name="utility:delete"
+                    alternative-text="Delete"
+                    name={todoItem.id}
+                    onclick={deleteTodoItemFromList}
+                    title="Delete"
+                  >
+                  </lightning-button-icon>
+                </lightning-layout-item>
+              </lightning-layout>
+            </li>
           </template>
         </ul>
       </lightning-layout-item>

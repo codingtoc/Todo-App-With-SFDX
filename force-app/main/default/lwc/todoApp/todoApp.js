@@ -1,7 +1,13 @@
-import { LightningElement, wire } from "lwc";
+import { LightningElement, track, wire } from "lwc";
 import getTasks from "@salesforce/apex/TodoListController.getTasks";
+import { refreshApex } from "@salesforce/apex";
 
 export default class TodoApp extends LightningElement {
+  @track
+  todoList = [];
+
+  todoListResponse;
+
   newTodoItem = "";
 
   updateNewTodoItem(event) {
@@ -34,5 +40,28 @@ export default class TodoApp extends LightningElement {
   }
 
   @wire(getTasks)
-  todoList;
+  getTodoList(response) {
+    this.todoListResponse = response;
+    let data = response.data;
+    let error = response.error;
+    if (data) {
+      this.todoList = [];
+      data.forEach((todoItem) => {
+        this.todoList.push({
+          id:
+            this.todoList.length > 0
+              ? this.todoList[this.todoList.length - 1].id + 1
+              : 1,
+          name: todoItem.Subject,
+          recordId: todoItem.Id
+        });
+      });
+    } else if (error) {
+      console.log(error);
+    }
+  }
+
+  refreshTodoList() {
+    refreshApex(this.todoListResponse);
+  }
 }
