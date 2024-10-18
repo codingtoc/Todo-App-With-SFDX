@@ -1,6 +1,7 @@
 import { LightningElement, track, wire } from "lwc";
 import getTasks from "@salesforce/apex/TodoListController.getTasks";
 import { refreshApex } from "@salesforce/apex";
+import insertTask from "@salesforce/apex/TodoListController.insertTask";
 
 export default class TodoApp extends LightningElement {
   @track
@@ -19,14 +20,19 @@ export default class TodoApp extends LightningElement {
       this.newTodoItem = "";
       return;
     }
-    this.todoList.push({
-      id:
-        this.todoList.length > 0
-          ? this.todoList[this.todoList.length - 1].id + 1
-          : 1,
-      name: this.newTodoItem
-    });
-    this.newTodoItem = "";
+    insertTask({ subject: this.newTodoItem })
+      .then((result) => {
+        this.todoList.push({
+          id:
+            this.todoList.length > 0
+              ? this.todoList[this.todoList.length - 1].id + 1
+              : 1,
+          name: this.newTodoItem,
+          recordId: result.Id
+        });
+        this.newTodoItem = "";
+      })
+      .catch((error) => console.log(error));
   }
 
   deleteTodoItemFromList(event) {
